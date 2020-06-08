@@ -12,14 +12,19 @@ class StudentABController: UITableViewController
 {
     
     var students = [Students]()
+    var filteredStudents = [Students]()
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var row = 0
+    //Use the same view you’re searching to display the results
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
         loadStudentData()
+        remindAlter()
+        setupSearchBar()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -33,11 +38,21 @@ class StudentABController: UITableViewController
         }
     }
     
+    func remindAlter()
+    {
+        AlertManager.alert(forWhichPage: self, alertType: .operationGuide)
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
+        if isFiltering
+        {
+          return filteredStudents.count
+        }
+        
         return students.count
     }
 
@@ -45,8 +60,15 @@ class StudentABController: UITableViewController
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "student", for: indexPath) as! StudentsInfoCell
         
-        cell.configure(students: students, indexPath: indexPath)
-
+        if isFiltering
+        {
+            cell.configure(students: filteredStudents, indexPath: indexPath)
+        }
+        else
+        {
+            cell.configure(students: students, indexPath: indexPath)
+        }
+        
         return cell
     }
     
@@ -112,17 +134,28 @@ extension StudentABController: StudentManageDelegate
         let cell = sender as! StudentsInfoCell
         
         row = tableView.indexPath(for: cell)!.row
-        viewController.fName = students[row].firstName
-        viewController.lName = students[row].lastName
-        viewController.major = students[row].major
+        
+        if isFiltering
+        {
+            viewController.fName =  filteredStudents[row].firstName
+            viewController.lName = filteredStudents[row].lastName
+            viewController.degree = filteredStudents[row].degree
+        }
+        else
+        {
+            viewController.fName = students[row].firstName
+            viewController.lName = students[row].lastName
+            viewController.degree = students[row].degree
+        }
+        
     }
     
-    func addStudent(fName: String, lName: String, major: String)
+    func addStudent(fName: String, lName: String, degree: String)
     {
         let student = Students(context: context)
         student.firstName = fName
         student.lastName = lName
-        student.major = major
+        student.degree = degree
         student.checked = false
         //Store Data to container
         students.append(student)
@@ -137,10 +170,56 @@ extension StudentABController: StudentManageDelegate
         //Edit Data
         students[row].firstName = fName
         students[row].lastName = lName
-        students[row].major = major
+        students[row].degree = major
         //Save Data to Core Data
         saveStudentData()
         //Update View
         tableView.reloadData()
     }
+}
+
+// MARK: - Search Bar Configuration
+
+extension StudentABController: UISearchResultsUpdating
+{
+    var isSearchBarEmpty: Bool
+    {
+      return searchController.searchBar.text?.isEmpty ?? true
+    }
+
+    var isFiltering: Bool
+    {
+      return searchController.isActive && !isSearchBarEmpty
+    }
+
+    func setupSearchBar()
+    {
+        // Inform self class of any text changes within the UISearchBar
+        searchController.searchResultsUpdater = self
+        // Set the current view to show the results, so you don’t want to obscure your view
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Students By First Name"
+        navigationItem.searchController = searchController
+        // 5 Ensure that the search bar doesn’t remain on the screen if the user navigates to another view controller while the UISearchController is active.
+        definesPresentationContext = true
+    }
+    
+    func updateSearchResults(for searchController: UISearchController)
+    {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
+    }
+    
+    func filterContentForSearchText(_ searchText: String)
+    {
+        filteredStudents = students.filter
+        { (student: Students) -> Bool in
+            
+            return student.firstName!.lowercased().contains(searchText.lowercased())
+        }
+        
+        tableView.reloadData()
+    }
+
+
 }

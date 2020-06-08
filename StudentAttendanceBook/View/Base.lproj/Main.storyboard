@@ -135,7 +135,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Major:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UR3-Ty-Q3m">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Degree:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UR3-Ty-Q3m">
                                 <rect key="frame" x="20" y="453" width="220" height="67"/>
                                 <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="23"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -183,6 +183,9 @@
                                 <color key="textColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCj-Qu-m4u">
+                                <rect key="frame" x="0.0" y="680" width="414" height="216"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -193,7 +196,9 @@
                             <constraint firstItem="Kw9-ct-fpc" firstAttribute="leading" secondItem="XKW-V1-9Bw" secondAttribute="leading" id="ECB-yq-Ber"/>
                             <constraint firstItem="iz4-6C-3aa" firstAttribute="top" secondItem="UR3-Ty-Q3m" secondAttribute="bottom" constant="24" id="Lch-7i-eOR"/>
                             <constraint firstItem="72w-6j-s9a" firstAttribute="leading" secondItem="4K8-XA-hwr" secondAttribute="leading" constant="30" id="Lo4-WV-qmE"/>
+                            <constraint firstItem="TCj-Qu-m4u" firstAttribute="leading" secondItem="4K8-XA-hwr" secondAttribute="leading" id="MnA-Zj-4Xy"/>
                             <constraint firstItem="saZ-Il-2fK" firstAttribute="centerX" secondItem="LOa-3H-W3Y" secondAttribute="centerX" id="QEe-6q-AXN"/>
+                            <constraint firstAttribute="bottom" secondItem="TCj-Qu-m4u" secondAttribute="bottom" id="S9a-Gr-emh"/>
                             <constraint firstItem="saZ-Il-2fK" firstAttribute="top" secondItem="LOa-3H-W3Y" secondAttribute="top" constant="217" id="TFL-Mi-39B"/>
                             <constraint firstItem="XKW-V1-9Bw" firstAttribute="trailing" secondItem="UR3-Ty-Q3m" secondAttribute="trailing" id="Veq-75-VDw"/>
                             <constraint firstItem="72w-6j-s9a" firstAttribute="top" secondItem="iz4-6C-3aa" secondAttribute="bottom" constant="63" id="bbr-1T-3uw"/>
@@ -210,6 +215,7 @@
                             <constraint firstItem="XKW-V1-9Bw" firstAttribute="leading" secondItem="UR3-Ty-Q3m" secondAttribute="leading" id="vps-1h-Xr3"/>
                             <constraint firstItem="DHh-Ib-3k3" firstAttribute="top" secondItem="72w-6j-s9a" secondAttribute="bottom" constant="8" id="wjF-r1-YK2"/>
                             <constraint firstItem="72w-6j-s9a" firstAttribute="trailing" secondItem="LOa-3H-W3Y" secondAttribute="trailingMargin" id="yAz-Pk-aSK"/>
+                            <constraint firstItem="TCj-Qu-m4u" firstAttribute="trailing" secondItem="4K8-XA-hwr" secondAttribute="trailing" id="yuF-qc-CSC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4K8-XA-hwr"/>
                     </view>
@@ -221,9 +227,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="degreePickerView" destination="TCj-Qu-m4u" id="8iN-rN-1rC"/>
+                        <outlet property="degreeTF" destination="iz4-6C-3aa" id="Fg7-Fa-xUG"/>
                         <outlet property="firstNameTF" destination="saZ-Il-2fK" id="2hE-Tv-urI"/>
                         <outlet property="lastNameTF" destination="ddP-tg-dxe" id="Q4M-4n-T2n"/>
-                        <outlet property="majorTF" destination="iz4-6C-3aa" id="Fg7-Fa-xUG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y5k-j7-PvH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -33,6 +33,6 @@ class StudentsInfoCell: UITableViewCell
         checkMarkLbl.text = student.checked ? "✓" : "x"
         firstNameLbl.text = student.firstName
         lastNameLbl.text = student.lastName
-        majorLbl.text = student.major
+        majorLbl.text = student.degree
     }
 }

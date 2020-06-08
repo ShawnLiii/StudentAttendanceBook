@@ -10,6 +10,6 @@ import Foundation
 
 protocol StudentManageDelegate
 {
-    func addStudent(fName: String, lName: String, major: String)
+    func addStudent(fName: String, lName: String, degree: String)
     func editStudent(fName: String, lName: String, major: String)
 }
