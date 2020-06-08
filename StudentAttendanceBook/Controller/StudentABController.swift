@@ -25,6 +25,7 @@ class StudentABController: UITableViewController
         loadStudentData()
         remindAlter()
         setupSearchBar()
+        if let directoryLocation = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).last {             print("Documents Directory: \(directoryLocation)Application Support")         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -220,6 +221,23 @@ extension StudentABController: UISearchResultsUpdating
         
         tableView.reloadData()
     }
-
+    
+//    func fetchDatabyFirstName(firstName: String)
+//    {
+//        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Students")
+//        request.predicate = NSPredicate(format: "fName = %@", firstName)
+//        request.returnsObjectsAsFaults = false
+//
+//        do
+//        {
+//            filteredStudents = try context.fetch(request) as? [Students]
+//        }
+//        catch
+//        {
+//            print("Failed")
+//        }
+//
+//        tableView.reloadData()
+//    }
 
 }
