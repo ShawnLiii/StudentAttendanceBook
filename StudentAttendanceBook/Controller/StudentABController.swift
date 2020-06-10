@@ -7,17 +7,20 @@
 //
 
 import UIKit
+import CoreData
 
 class StudentABController: UITableViewController
 {
     
     var students = [Students]()
     var filteredStudents = [Students]()
-    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var row = 0
     //Use the same view you’re searching to display the results
     let searchController = UISearchController(searchResultsController: nil)
+    var isSegementUsing = false
+    
+    @IBOutlet weak var degreeSegment: UISegmentedControl!
     
     override func viewDidLoad()
     {
@@ -41,6 +44,12 @@ class StudentABController: UITableViewController
     func remindAlter()
     {
         AlertManager.alert(forWhichPage: self, alertType: .operationGuide)
+    }
+    
+    @IBAction func resetTapped(_ sender: UIBarButtonItem)
+    {
+        isSegementUsing = false
+        tableView.reloadData()
     }
     
     // MARK: - Table view data source
@@ -189,7 +198,7 @@ extension StudentABController: UISearchResultsUpdating
 
     var isFiltering: Bool
     {
-      return searchController.isActive && !isSearchBarEmpty
+      return (searchController.isActive && !isSearchBarEmpty) || isSegementUsing
     }
 
     func setupSearchBar()
@@ -221,5 +230,36 @@ extension StudentABController: UISearchResultsUpdating
         tableView.reloadData()
     }
 
+}
 
+// Segment Control
+extension StudentABController
+{
+    
+    @IBAction func degreeSegmentTapped(_ sender: UISegmentedControl)
+    {
+        let getIndex = degreeSegment.selectedSegmentIndex
+        let degree = Degree.degree[getIndex]
+        fetchDatabyDegree(degree: degree)
+    }
+    
+    func fetchDatabyDegree(degree: String)
+    {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Students")
+        request.predicate = NSPredicate(format: "degree contains %@", degree)
+        request.returnsObjectsAsFaults = false
+        
+        do
+        {
+            filteredStudents = try context.fetch(request) as! [Students]
+            isSegementUsing = true
+        }
+        catch
+        {
+            print("Failed")
+        }
+        
+        tableView.reloadData()
+    }
+    
 }

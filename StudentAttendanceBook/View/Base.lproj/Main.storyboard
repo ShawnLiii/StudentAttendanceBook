@@ -18,9 +18,21 @@
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <segmentedControl key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="6EP-dN-HLt">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Bachelor"/>
+                                <segment title="Master"/>
+                                <segment title="Doctor"/>
+                            </segments>
+                            <connections>
+                                <action selector="degreeSegmentTapped:" destination="7fW-X9-LzK" eventType="valueChanged" id="KB1-dK-SlW"/>
+                            </connections>
+                        </segmentedControl>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="student" rowHeight="94" id="U9f-yF-AC6" customClass="StudentsInfoCell" customModule="StudentAttendanceBook" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="94"/>
+                                <rect key="frame" x="0.0" y="60" width="414" height="94"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="U9f-yF-AC6" id="FUq-Bm-q7T">
                                     <rect key="frame" x="0.0" y="0.0" width="370" height="94"/>
@@ -100,6 +112,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Attendance Book" id="f8X-zd-lrm">
+                        <barButtonItem key="leftBarButtonItem" title="Reset" id="cQQ-Xk-iZw">
+                            <connections>
+                                <action selector="resetTapped:" destination="7fW-X9-LzK" id="n3M-m6-vK9"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="h2r-sJ-0zF">
                             <connections>
                                 <segue destination="xQg-WR-Bkc" kind="show" id="JQj-ji-1HM"/>
@@ -107,6 +124,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="degreeSegment" destination="6EP-dN-HLt" id="EM9-4Z-IW1"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1ZO-De-wA5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
