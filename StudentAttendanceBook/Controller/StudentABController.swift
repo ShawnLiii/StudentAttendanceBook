@@ -53,18 +53,18 @@ class StudentABController: UITableViewController
     }
     
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
         if isFiltering
         {
-          return filteredStudents.count
+            return filteredStudents.count
         }
         
         return students.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "student", for: indexPath) as! StudentsInfoCell
@@ -109,10 +109,10 @@ class StudentABController: UITableViewController
     }
 }
 
-    //MARK: - Core Data and Delegation Function
+//MARK: - Core Data and Delegation Function
 extension StudentABController: StudentManageDelegate
 {
-
+    
     func loadStudentData()
     {
         do
@@ -193,14 +193,14 @@ extension StudentABController: UISearchResultsUpdating
 {
     var isSearchBarEmpty: Bool
     {
-      return searchController.searchBar.text?.isEmpty ?? true
+        return searchController.searchBar.text?.isEmpty ?? true
     }
-
+    
     var isFiltering: Bool
     {
-      return (searchController.isActive && !isSearchBarEmpty) || isSegementUsing
+        return (searchController.isActive && !isSearchBarEmpty) || isSegementUsing
     }
-
+    
     func setupSearchBar()
     {
         // Inform self class of any text changes within the UISearchBar
@@ -222,14 +222,13 @@ extension StudentABController: UISearchResultsUpdating
     func filterContentForSearchText(_ searchText: String)
     {
         filteredStudents = students.filter
-        { (student: Students) -> Bool in
-            
-            return student.firstName!.lowercased().contains(searchText.lowercased())
+            { (student: Students) -> Bool in
+                
+                return student.firstName!.lowercased().contains(searchText.lowercased())
         }
         
         tableView.reloadData()
     }
-
 }
 
 // Segment Control
