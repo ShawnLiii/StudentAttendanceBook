@@ -13,9 +13,7 @@ class StudentABController: UITableViewController
 {
     
     let context = CoreDataManager.shared.persistentContainer.viewContext
-    
     var row = 0
-    //Use the same view you’re searching to display the results
     let searchController = UISearchController(searchResultsController: nil)
     var isSegementUsing = false
     
