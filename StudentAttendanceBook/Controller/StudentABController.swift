@@ -246,6 +246,7 @@ extension StudentABController
     {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Students")
         request.predicate = NSPredicate(format: "degree contains %@", degree)
+        request.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         request.returnsObjectsAsFaults = false
         
         do
