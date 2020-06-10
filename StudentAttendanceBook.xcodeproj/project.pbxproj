@@ -19,6 +19,7 @@
 		3D4F3823248BFD14005409BC /* StudentInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F3822248BFD14005409BC /* StudentInfoController.swift */; };
 		3D4F3828248C1001005409BC /* StudentManageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F3827248C1001005409BC /* StudentManageDelegate.swift */; };
 		3D4F382B248C17A8005409BC /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F382A248C17A8005409BC /* AlertManager.swift */; };
+		3DFFFB6024918556007C54C6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFFFB5F24918556007C54C6 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		3D4F3822248BFD14005409BC /* StudentInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInfoController.swift; sourceTree = "<group>"; };
 		3D4F3827248C1001005409BC /* StudentManageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentManageDelegate.swift; sourceTree = "<group>"; };
 		3D4F382A248C17A8005409BC /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		3DFFFB5F24918556007C54C6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				3D4F3818248BF4E4005409BC /* Common */,
 				3D4F381B248BF50A005409BC /* Model */,
 				3D4F381A248BF4FC005409BC /* View */,
+				3DFFFB5E2491852D007C54C6 /* View Model */,
 				3D4F3819248BF4EE005409BC /* Controller */,
 				3D4F381C248BF51A005409BC /* SupportFiles */,
 			);
@@ -139,6 +142,14 @@
 				3D4F382A248C17A8005409BC /* AlertManager.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		3DFFFB5E2491852D007C54C6 /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				3DFFFB5F24918556007C54C6 /* CoreDataManager.swift */,
+			);
+			path = "View Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,6 +231,7 @@
 				3D4F3823248BFD14005409BC /* StudentInfoController.swift in Sources */,
 				3D4F382B248C17A8005409BC /* AlertManager.swift in Sources */,
 				3D4F380C248BF4CE005409BC /* StudentAttendanceBook.xcdatamodeld in Sources */,
+				3DFFFB6024918556007C54C6 /* CoreDataManager.swift in Sources */,
 				3D4F3821248BF5E1005409BC /* StudentsInfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
