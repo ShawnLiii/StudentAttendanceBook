@@ -60,6 +60,7 @@ class StudentInfoController: UIViewController
         firstNameTF.text = fName
         lastNameTF.text = lName
         degreeTF.text = degree
+        degreeTF.inputView = degreePickerView
     }
 }
     // MARK: - Text Field Delegation
@@ -67,8 +68,8 @@ extension StudentInfoController: UITextFieldDelegate
 {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        firstNameTF.resignFirstResponder()
-        lastNameTF.resignFirstResponder()
+        
+        textField.resignFirstResponder()
         
         return true
     }
@@ -77,7 +78,6 @@ extension StudentInfoController: UITextFieldDelegate
     {
         if textField == degreeTF
         {
-            degreeTF.inputView = degreePickerView
             degreePickerView.isHidden = false
         }
         

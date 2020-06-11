@@ -11,7 +11,6 @@ import UIKit
 class StudentViewModel
 {
     var students = [Students]()
-    var filteredStudents = [Students]()
     var updateHandler: () -> () = {}
 
     func loadStudentData()
@@ -23,16 +22,32 @@ class StudentViewModel
         }
     }
     
-    func fetchDatabyDegree(degree: String, handler: (Bool) -> ())
+    func fetchDatabyDegree(degree: String)
     {
-        let flag = true
         
-        CoreDataManager.shared.fetchDatabyDegree(degree: degree)
+        CoreDataManager.shared.filterData(firstName: nil, degree: degree)
         { (students) in
-            self.filteredStudents = students
-            handler(flag)
+            self.students = students
             self.updateHandler()
         }
-        
+    }
+    
+    func fetchDatabyFirstName(firstName: String)
+    {
+        CoreDataManager.shared.filterData(firstName: firstName, degree: nil)
+        { (students) in
+            self.students = students
+            self.updateHandler()
+        }
+    }
+    
+    func saveStudentData()
+    {
+        CoreDataManager.shared.saveContext()
+    }
+    
+    func deleteStudentData(student: Students)
+    {
+        CoreDataManager.shared.deleteData(student: student)
     }
 }

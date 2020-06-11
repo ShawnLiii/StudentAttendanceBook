@@ -12,11 +12,9 @@ import CoreData
 class StudentABController: UITableViewController
 {
     
-    let context = CoreDataManager.shared.persistentContainer.viewContext
     let studentViewModel = StudentViewModel()
     var row = 0
     let searchController = UISearchController(searchResultsController: nil)
-    var isSegementUsing = false
     
     @IBOutlet weak var degreeSegment: UISegmentedControl!
     
@@ -47,7 +45,7 @@ class StudentABController: UITableViewController
     
     @IBAction func resetTapped(_ sender: UIBarButtonItem)
     {
-        isSegementUsing = false
+        studentViewModel.loadStudentData()
         tableView.reloadData()
     }
     
@@ -55,27 +53,14 @@ class StudentABController: UITableViewController
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        // #warning Incomplete implementation, return the number of rows
-        if isFiltering
-        {
-            return studentViewModel.filteredStudents.count
-        }
-        
         return studentViewModel.students.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "student", for: indexPath) as! StudentsInfoCell
-        
-        if isFiltering
-        {
-            cell.configure(students: studentViewModel.filteredStudents, indexPath: indexPath)
-        }
-        else
-        {
-            cell.configure(students: studentViewModel.students, indexPath: indexPath)
-        }
+
+        cell.configure(student: studentViewModel.students[indexPath.row])
         
         return cell
     }
@@ -84,8 +69,7 @@ class StudentABController: UITableViewController
     {
         studentViewModel.students[indexPath.row].checked = !studentViewModel.students[indexPath.row].checked
         // Save Data
-        
-        CoreDataManager.shared.saveStudentData()
+        studentViewModel.saveStudentData()
         // Change View
         let cell = tableView.cellForRow(at: indexPath) as! StudentsInfoCell
         cell.checkMarkLbl.text = studentViewModel.students[indexPath.row].checked ? "✓" : "x"
@@ -98,11 +82,11 @@ class StudentABController: UITableViewController
         if editingStyle == .delete
         {
             // Delete from Core Data
-            CoreDataManager.shared.deleteData(student: studentViewModel.students[indexPath.row])
+            studentViewModel.deleteStudentData(student: studentViewModel.students[indexPath.row])
             // Delete from Container
             studentViewModel.students.remove(at: indexPath.row)
             // Save Change
-            CoreDataManager.shared.saveStudentData()
+            studentViewModel.saveStudentData()
             //Update View
             tableView.reloadData()
         }
@@ -118,26 +102,16 @@ extension StudentABController: StudentManageDelegate
         let cell = sender as! StudentsInfoCell
         row = tableView.indexPath(for: cell)!.row
         
-        if isFiltering
-        {
-            let filteredStudent = studentViewModel.filteredStudents[row]
-            viewController.fName =  filteredStudent.firstName
-            viewController.lName = filteredStudent.lastName
-            viewController.degree = filteredStudent.degree
-        }
-        else
-        {
-            let student = studentViewModel.students[row]
-            viewController.fName = student.firstName
-            viewController.lName = student.lastName
-            viewController.degree = student.degree
-        }
+        let student = studentViewModel.students[row]
+        viewController.fName = student.firstName
+        viewController.lName = student.lastName
+        viewController.degree = student.degree
         
     }
     
     func addStudent(fName: String, lName: String, degree: String)
     {
-        let student = Students(context: context)
+        let student = Students(context: CoreDataManager.shared.persistentContainer.viewContext)
         student.firstName = fName
         student.lastName = lName
         student.degree = degree
@@ -145,7 +119,7 @@ extension StudentABController: StudentManageDelegate
         //Store Data to container
         studentViewModel.students.append(student)
         //Store Data to Core Data
-        CoreDataManager.shared.saveStudentData()
+        studentViewModel.saveStudentData()
         //Update View
         tableView.reloadData()
     }
@@ -153,11 +127,12 @@ extension StudentABController: StudentManageDelegate
     func editStudent(fName: String, lName: String, major: String)
     {
         //Edit Data
-        studentViewModel.students[row].firstName = fName
-        studentViewModel.students[row].lastName = lName
-        studentViewModel.students[row].degree = major
+        let student = studentViewModel.students[row]
+        student.firstName = fName
+        student.lastName = lName
+        student.degree = major
         //Save Data to Core Data
-        CoreDataManager.shared.saveStudentData()
+        studentViewModel.saveStudentData()
         //Update View
         tableView.reloadData()
     }
@@ -170,11 +145,6 @@ extension StudentABController: UISearchResultsUpdating
     var isSearchBarEmpty: Bool
     {
         return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    var isFiltering: Bool
-    {
-        return (searchController.isActive && !isSearchBarEmpty) || isSegementUsing
     }
     
     func setupSearchBar()
@@ -193,15 +163,12 @@ extension StudentABController: UISearchResultsUpdating
     {
         let searchBar = searchController.searchBar
         filterContentForSearchText(searchBar.text!)
+        
     }
     
     func filterContentForSearchText(_ searchText: String)
     {
-        studentViewModel.filteredStudents = studentViewModel.students.filter
-        { (student: Students) -> Bool in
-            return student.firstName!.lowercased().contains(searchText.lowercased())
-        }
-        
+        studentViewModel.fetchDatabyFirstName(firstName: searchText)
         tableView.reloadData()
     }
 }
@@ -214,11 +181,7 @@ extension StudentABController
     {
         let getIndex = degreeSegment.selectedSegmentIndex
         let degree = Degree.degree[getIndex]
-        
         studentViewModel.fetchDatabyDegree(degree: degree)
-        { (flag) in
-            isSegementUsing = flag
-        }
     }
     
 }

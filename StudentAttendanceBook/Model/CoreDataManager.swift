@@ -28,7 +28,7 @@ class CoreDataManager
     
     // MARK: - Core Data Saving support
     
-    func saveContext ()
+    func saveContext()
     {
         let context = persistentContainer.viewContext
         if context.hasChanges
@@ -62,35 +62,29 @@ class CoreDataManager
             print(error.localizedDescription)
         }
     }
-    
-    func saveStudentData()
+
+    func filterData(firstName: String?, degree: String?, handler: ([Students]) -> ())
     {
-        let context = persistentContainer.viewContext
-        
-        do
-        {
-            try context.save()
-        }
-        catch
-        {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func fetchDatabyDegree(degree: String, handler: ([Students]) -> ())
-    {
-        var filteredStudents = [Students]()
+        var students = [Students]()
         let context = persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Students")
         
-        request.predicate = NSPredicate(format: "degree contains %@", degree)
+        if let fName = firstName
+        {
+            request.predicate = NSPredicate(format: "firstName contains[c] %@", fName)
+        }
+        if let degree = degree
+        {
+            request.predicate = NSPredicate(format: "degree contains %@", degree)
+        }
+        
         request.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         request.returnsObjectsAsFaults = false
         
         do
         {
-            filteredStudents = try context.fetch(request) as! [Students]
-            handler(filteredStudents)
+            students = try context.fetch(request) as! [Students]
+            handler(students)
         }
         catch
         {

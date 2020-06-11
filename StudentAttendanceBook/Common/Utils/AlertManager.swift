@@ -12,7 +12,7 @@ class AlertManager
 {
     enum AlertType: String
     {
-        case emptyTextField = "Names or Major can't be empty."
+        case emptyTextField = "Names or Degree can't be empty."
         case operationGuide = "Please add student infomation by tapping the \"+\" icon on the right top.\nSwipe down to use the search bar."
     }
     

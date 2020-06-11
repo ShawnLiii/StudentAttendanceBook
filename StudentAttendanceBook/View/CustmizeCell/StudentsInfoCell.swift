@@ -27,9 +27,8 @@ class StudentsInfoCell: UITableViewCell
         // Configure the view for the selected state
     }
 
-    func configure(students: [Students] ,indexPath: IndexPath)
+    func configure(student: Students)
     {
-        let student = students[indexPath.row]
         checkMarkLbl.text = student.checked ? "✓" : "x"
         firstNameLbl.text = student.firstName
         lastNameLbl.text = student.lastName
