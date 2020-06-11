@@ -120,15 +120,17 @@ extension StudentABController: StudentManageDelegate
         
         if isFiltering
         {
-            viewController.fName =  studentViewModel.filteredStudents[row].firstName
-            viewController.lName = studentViewModel.filteredStudents[row].lastName
-            viewController.degree = studentViewModel.filteredStudents[row].degree
+            let filteredStudent = studentViewModel.filteredStudents[row]
+            viewController.fName =  filteredStudent.firstName
+            viewController.lName = filteredStudent.lastName
+            viewController.degree = filteredStudent.degree
         }
         else
         {
-            viewController.fName = studentViewModel.students[row].firstName
-            viewController.lName = studentViewModel.students[row].lastName
-            viewController.degree = studentViewModel.students[row].degree
+            let student = studentViewModel.students[row]
+            viewController.fName = student.firstName
+            viewController.lName = student.lastName
+            viewController.degree = student.degree
         }
         
     }
