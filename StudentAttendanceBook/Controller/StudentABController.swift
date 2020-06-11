@@ -13,6 +13,7 @@ class StudentABController: UITableViewController
 {
     
     let context = CoreDataManager.shared.persistentContainer.viewContext
+    let studentViewModel = StudentViewModel()
     var row = 0
     let searchController = UISearchController(searchResultsController: nil)
     var isSegementUsing = false
@@ -22,10 +23,10 @@ class StudentABController: UITableViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        CoreDataManager.shared.loadStudentData()
         remindAlter()
         setupSearchBar()
-        CoreDataManager.shared.updateHandler = self.tableView.reloadData
+        studentViewModel.updateHandler = self.tableView.reloadData
+        studentViewModel.loadStudentData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -57,10 +58,10 @@ class StudentABController: UITableViewController
         // #warning Incomplete implementation, return the number of rows
         if isFiltering
         {
-            return CoreDataManager.shared.filteredStudents.count
+            return studentViewModel.filteredStudents.count
         }
         
-        return CoreDataManager.shared.students.count
+        return studentViewModel.students.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
@@ -69,11 +70,11 @@ class StudentABController: UITableViewController
         
         if isFiltering
         {
-            cell.configure(students: CoreDataManager.shared.filteredStudents, indexPath: indexPath)
+            cell.configure(students: studentViewModel.filteredStudents, indexPath: indexPath)
         }
         else
         {
-            cell.configure(students: CoreDataManager.shared.students, indexPath: indexPath)
+            cell.configure(students: studentViewModel.students, indexPath: indexPath)
         }
         
         return cell
@@ -81,13 +82,13 @@ class StudentABController: UITableViewController
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        CoreDataManager.shared.students[indexPath.row].checked = !CoreDataManager.shared.students[indexPath.row].checked
+        studentViewModel.students[indexPath.row].checked = !studentViewModel.students[indexPath.row].checked
         // Save Data
         
         CoreDataManager.shared.saveStudentData()
         // Change View
         let cell = tableView.cellForRow(at: indexPath) as! StudentsInfoCell
-        cell.checkMarkLbl.text = CoreDataManager.shared.students[indexPath.row].checked ? "✓" : "x"
+        cell.checkMarkLbl.text = studentViewModel.students[indexPath.row].checked ? "✓" : "x"
         // deselect
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -97,9 +98,9 @@ class StudentABController: UITableViewController
         if editingStyle == .delete
         {
             // Delete from Core Data
-            context.delete(CoreDataManager.shared.students[indexPath.row])
+            CoreDataManager.shared.deleteData(student: studentViewModel.students[indexPath.row])
             // Delete from Container
-            CoreDataManager.shared.students.remove(at: indexPath.row)
+            studentViewModel.students.remove(at: indexPath.row)
             // Save Change
             CoreDataManager.shared.saveStudentData()
             //Update View
@@ -119,15 +120,15 @@ extension StudentABController: StudentManageDelegate
         
         if isFiltering
         {
-            viewController.fName =  CoreDataManager.shared.filteredStudents[row].firstName
-            viewController.lName = CoreDataManager.shared.filteredStudents[row].lastName
-            viewController.degree = CoreDataManager.shared.filteredStudents[row].degree
+            viewController.fName =  studentViewModel.filteredStudents[row].firstName
+            viewController.lName = studentViewModel.filteredStudents[row].lastName
+            viewController.degree = studentViewModel.filteredStudents[row].degree
         }
         else
         {
-            viewController.fName = CoreDataManager.shared.students[row].firstName
-            viewController.lName = CoreDataManager.shared.students[row].lastName
-            viewController.degree = CoreDataManager.shared.students[row].degree
+            viewController.fName = studentViewModel.students[row].firstName
+            viewController.lName = studentViewModel.students[row].lastName
+            viewController.degree = studentViewModel.students[row].degree
         }
         
     }
@@ -140,7 +141,7 @@ extension StudentABController: StudentManageDelegate
         student.degree = degree
         student.checked = false
         //Store Data to container
-        CoreDataManager.shared.students.append(student)
+        studentViewModel.students.append(student)
         //Store Data to Core Data
         CoreDataManager.shared.saveStudentData()
         //Update View
@@ -150,9 +151,9 @@ extension StudentABController: StudentManageDelegate
     func editStudent(fName: String, lName: String, major: String)
     {
         //Edit Data
-        CoreDataManager.shared.students[row].firstName = fName
-        CoreDataManager.shared.students[row].lastName = lName
-        CoreDataManager.shared.students[row].degree = major
+        studentViewModel.students[row].firstName = fName
+        studentViewModel.students[row].lastName = lName
+        studentViewModel.students[row].degree = major
         //Save Data to Core Data
         CoreDataManager.shared.saveStudentData()
         //Update View
@@ -194,7 +195,7 @@ extension StudentABController: UISearchResultsUpdating
     
     func filterContentForSearchText(_ searchText: String)
     {
-        CoreDataManager.shared.filteredStudents = CoreDataManager.shared.students.filter
+        studentViewModel.filteredStudents = studentViewModel.students.filter
         { (student: Students) -> Bool in
             return student.firstName!.lowercased().contains(searchText.lowercased())
         }
@@ -212,7 +213,7 @@ extension StudentABController
         let getIndex = degreeSegment.selectedSegmentIndex
         let degree = Degree.degree[getIndex]
         
-        CoreDataManager.shared.fetchDatabyDegree(degree: degree)
+        studentViewModel.fetchDatabyDegree(degree: degree)
         { (flag) in
             isSegementUsing = flag
         }

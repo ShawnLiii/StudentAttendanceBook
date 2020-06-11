@@ -12,10 +12,6 @@ import CoreData
 class CoreDataManager
 {
     static let shared = CoreDataManager()
-    var students = [Students]()
-    var filteredStudents = [Students]()
-    var updateHandler: () -> () = {}
-    
     private init() {}
     
     lazy var persistentContainer: NSPersistentContainer =
@@ -51,14 +47,15 @@ class CoreDataManager
     
     // MARK: - Data Manager function
     
-    func loadStudentData()
+    func loadStudentData(handler: ([Students]) -> ())
     {
+        var students = [Students]()
         let context = persistentContainer.viewContext
         
         do
         {
             students = try context.fetch(Students.fetchRequest())
-            updateHandler()
+            handler(students)
         }
         catch
         {
@@ -80,11 +77,12 @@ class CoreDataManager
         }
     }
     
-    func fetchDatabyDegree(degree: String, handler: (Bool) -> ())
+    func fetchDatabyDegree(degree: String, handler: ([Students]) -> ())
     {
-        let flag = true
+        var filteredStudents = [Students]()
         let context = persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Students")
+        
         request.predicate = NSPredicate(format: "degree contains %@", degree)
         request.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         request.returnsObjectsAsFaults = false
@@ -92,14 +90,18 @@ class CoreDataManager
         do
         {
             filteredStudents = try context.fetch(request) as! [Students]
-            handler(flag)
+            handler(filteredStudents)
         }
         catch
         {
             print("Failed")
         }
-        
-        updateHandler()
+    }
+    
+    func deleteData(student: Students)
+    {
+        let context = persistentContainer.viewContext
+        context.delete(student)
     }
     
 }
