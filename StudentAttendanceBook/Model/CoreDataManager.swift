@@ -73,6 +73,7 @@ class CoreDataManager
         {
             request.predicate = NSPredicate(format: "firstName contains[c] %@", fName)
         }
+        
         if let degree = degree
         {
             request.predicate = NSPredicate(format: "degree contains %@", degree)
